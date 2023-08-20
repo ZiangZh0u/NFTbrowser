@@ -1,8 +1,9 @@
-import { message, Layout, Input, Button, List, Card } from "antd";
-import "./App.css";
+import { Button, Card, Input, Layout, List, message } from "antd";
 import { useState } from "react";
-import NftCard from "./components/NftCards";
 import { getContractNFTs } from "./utils";
+import "./App.css";
+import NftCard from "./components/NftCard";
+import ContractTrades from "./components/ContractTrades";
 
 const { Header, Content } = Layout;
 
@@ -15,7 +16,9 @@ function App() {
     if (searchText === "") {
       return;
     }
+
     setLoading(true);
+
     try {
       const data = await getContractNFTs(searchText);
       setNfts(data.result);
@@ -25,6 +28,7 @@ function App() {
       setLoading(false);
     }
   };
+
   return (
     <Layout style={{ height: "100vh" }}>
       <Header>
@@ -37,7 +41,7 @@ function App() {
       >
         <Input.Group compact>
           <Input
-            style={{ width: 300 }}
+            style={{ width: 500 }}
             placeholder="Enter a NFT contract address to search"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -45,6 +49,7 @@ function App() {
           <Button type="primary" onClick={handleSearch}>
             Search
           </Button>
+          <ContractTrades tokenAddress={searchText} />
         </Input.Group>
         <List
           loading={loading}
